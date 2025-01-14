@@ -1,0 +1,13 @@
+name: BetterHub
+version: 1.0.0
+author: Terpz710
+api: 5.0.0
+main: terpz710\betterhub\Hub
+
+permissions:
+  betterhub.hub:
+    default: true
+  betterhub.set:
+    default: op
+  betterhub.delete:
+    default: op

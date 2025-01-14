@@ -1,0 +1,36 @@
+# Message for when the hub is not set
+# You may use '&' for color coding(e.g. &l&bAqua)
+
+hub-not-set: "&cHub is not set!"
+
+# Preparing to teleport message
+# You may use '&' for color coding(e.g. &l&bAqua)
+
+preparing-to-teleport: "Preparing to teleport to the hub..."
+
+# Countdown message
+# You may use '&' for color coding(e.g. &l&bAqua)
+# Available tags:
+#  - {timer} = Countdown timer
+
+countdown-tip: "You will be teleported in &e{timer}&f seconds!"
+
+# Teleportation cancelled message
+# You may use '&' for color coding(e.g. &l&bAqua)
+
+teleportation-cancelled: "&cYou moved, teleportation cancelled!"
+
+# Teleportation success message
+# You may use '&' for color coding(e.g. &l&bAqua)
+
+successfully-teleported: "&aYou have been teleported to the hub!"
+
+# Hub successfully deleted message
+# You may use '&' for color coding(e.g. &l&bAqua)
+
+hub-deleted: "&eHub has been deleted!"
+
+# Hub successfully set message
+# You may use '&' for color coding(e.g. &l&bAqua)
+
+set-hub: "&aHub has been set!"
