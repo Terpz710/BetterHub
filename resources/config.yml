@@ -1,4 +1,29 @@
 # Terpz710 was here :p
 
 # Specify the countdown timer before teleportation
+
 timer: 5
+
+# Delete hub command configuration
+
+deletehub-command-label: "deletehub"
+deletehub-command-description: "Delete the hub location"
+deletehub-command-aliases:
+  - delhub
+  - removehub
+
+# Hub command configuration
+
+hub-command-label: "hub"
+hub-command-description: "Teleport to the hub"
+hub-command-aliases:
+  - spawn
+  - lobby
+
+# Set hub command configuration
+
+sethub-command-label: "sethub"
+sethub-command-description: "Set the hub location"
+sethub-command-aliases:
+  - setspawn
+  - setlobby
