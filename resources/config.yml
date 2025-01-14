@@ -11,6 +11,8 @@ deletehub-command-description: "Delete the hub location"
 deletehub-command-aliases:
   - delhub
   - removehub
+  - delspawn
+  - dellobby
 
 # Hub command configuration
 
