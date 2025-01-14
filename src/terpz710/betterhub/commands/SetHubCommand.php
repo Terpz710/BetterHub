@@ -21,8 +21,9 @@ class SetHubCommand extends Command implements PluginOwned {
     private $plugin;
 
     public function __construct() {
-        parent::__construct("sethub");
-        $this->setDescription("Set the hub location");
+        parent::__construct(Hub::getInstance()->getConfig()->get("sethub-command-label"));
+        $this->setDescription(Hub::getInstance()->getConfig()->get("sethub-command-description"));
+        $this->setAliases(Hub::getInstance()->getConfig()->get("sethub-command-aliases", []));
         $this->setPermission(Permission::PERM_SETHUB);
 
         $this->plugin = Hub::getInstance();
