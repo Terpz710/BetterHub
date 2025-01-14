@@ -23,8 +23,9 @@ class HubCommand extends Command implements PluginOwned {
     private $plugin;
 
     public function __construct() {
-        parent::__construct("hub");
-        $this->setDescription("Teleport to the hub");
+        parent::__construct(Hub::getInstance()->getConfig()->get("hub-command-label"));
+        $this->setDescription(Hub::getInstance()->getConfig()->get("hub-command-description"));
+        $this->setAliases(Hub::getInstance()->getConfig()->get("hub-command-aliases", []));
         $this->setPermission(Permission::PERM_HUB);
 
         $this->plugin = Hub::getInstance();
