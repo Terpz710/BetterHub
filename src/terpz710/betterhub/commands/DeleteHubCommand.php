@@ -21,8 +21,9 @@ class DeleteHubCommand extends Command implements PluginOwned {
     private $plugin;
 
     public function __construct() {
-        parent::__construct("deletehub");
-        $this->setDescription("Delete the hub location");
+        parent::__construct(Hub::getInstance()->getConfig()->get("deletehub-command-label"));
+        $this->setDescription(Hub::getInstance()->getConfig()->get("deletehub-command-description"));
+        $this->setAliases(Hub::getInstance()->getConfig()->get("deletehub-command-aliases"));
         $this->setPermission(Permission::PERM_DELHUB);
 
         $this->plugin = Hub::getInstance();
