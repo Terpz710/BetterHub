@@ -25,6 +25,8 @@ class TeleportationTask extends Task {
 
     private Position $startPosition;
 
+    private HubManager $hubManager;
+
     private int $timer;
 
     public function __construct(Player $player) {
