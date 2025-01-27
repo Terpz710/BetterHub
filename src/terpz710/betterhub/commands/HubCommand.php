@@ -12,6 +12,8 @@ use pocketmine\plugin\PluginOwned;
 
 use pocketmine\player\Player;
 
+use pocketmine\world\Position;
+
 use terpz710\betterhub\Hub;
 
 use terpz710\betterhub\task\TeleportationTask;
@@ -31,7 +33,7 @@ class HubCommand extends Command implements PluginOwned {
         $this->plugin = Hub::getInstance();
     }
 
-    public function execute(CommandSender $sender, string $label, array $args) : bool {
+    public function execute(CommandSender $sender, string $label, array $args) : bool{
         if (!$sender instanceof Player) {
             $sender->sendMessage(Error::TYPE_USE_COMMAND_INGAME_ONLY);
             return false;
@@ -49,7 +51,7 @@ class HubCommand extends Command implements PluginOwned {
                 return;
             }
             $sender->sendMessage((string) new Message("preparing-to-teleport"));
-            $this->plugin->getScheduler()->scheduleRepeatingTask(new TeleportationTask($sender, $hubPosition), 20);
+            $this->plugin->getScheduler()->scheduleRepeatingTask(new TeleportationTask($sender), 20);
         });
         return true;
     }
