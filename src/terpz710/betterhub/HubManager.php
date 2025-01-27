@@ -48,7 +48,7 @@ final class HubManager {
         });
     }
 
-    public function getHub(callable $callback) : void{
+    public function getHub(callable $callback): void {
         $this->database->executeSelect("hub.select", [], function (array $rows) use ($callback): void {
             if (empty($rows)) {
                 $callback(null);
@@ -72,9 +72,9 @@ final class HubManager {
 
             $position = new Position((float)$data["x"], (float)$data["y"], (float)$data["z"], $world);
             $callback($position);
-        }, function (\Exception $e): void {
+        }, function (\Exception $e) use ($callback): void {
             $this->plugin->getLogger()->error("Failed to fetch hub position: " . $e->getMessage());
-            $callback(null);
+        $callback(null);
         });
     }
 
