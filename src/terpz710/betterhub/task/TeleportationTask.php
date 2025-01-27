@@ -38,7 +38,7 @@ class TeleportationTask extends Task {
         $player->getEffects()->add(new EffectInstance(VanillaEffects::BLINDNESS(), 20 * $this->timer));
     }
 
-    public function onRun() : void{
+    public function onRun() : void {
         $player = $this->player;
 
         if (!$player->isOnline()) {
@@ -46,51 +46,43 @@ class TeleportationTask extends Task {
             return;
         }
 
-        $hubPosition = $this->hubManager->getHub();
-
-        if ($hubPosition === null) {
-            $player->sendMessage((string) new Message("hub-not-set"));
-            $player->getEffects()->remove(VanillaEffects::BLINDNESS());
-            $this->getHandler()->cancel();
-            return;
-        }
-
-        $worldManager = Server::getInstance()->getWorldManager();
-        $hubWorldName = $hubPosition->getWorld()->getFolderName();
-
-        if (!$worldManager->isWorldLoaded($hubWorldName)) {
-            if (!$worldManager->loadWorld($hubWorldName)) {
-                $player->sendMessage(Error::TYPE_WORLD_CANNOT_BE_LOADED);
+    // Use the asynchronous `getHub` method with a callback
+        $this->hubManager->getHub(function (?Position $hubPosition) use ($player): void {
+            if ($hubPosition === null) {
+                $player->sendMessage((string) new Message("hub-not-set"));
                 $player->getEffects()->remove(VanillaEffects::BLINDNESS());
                 $this->getHandler()->cancel();
                 return;
             }
-        }
 
-        $hubWorld = $worldManager->getWorldByName($hubWorldName);
+            $worldManager = Server::getInstance()->getWorldManager();
+            $hubWorldName = $hubPosition->getWorld()->getFolderName();
 
-        if ($hubWorld === null) {
-            $player->sendMessage(Error::TYPE_WORLD_CANNOT_BE_LOADED);
-            $player->getEffects()->remove(VanillaEffects::BLINDNESS());
-            $this->getHandler()->cancel();
-            return;
-        }
+            if (!$worldManager->isWorldLoaded($hubWorldName)) {
+                if (!$worldManager->loadWorld($hubWorldName)) {
+                    $player->sendMessage(Error::TYPE_WORLD_CANNOT_BE_LOADED);
+                    $player->getEffects()->remove(VanillaEffects::BLINDNESS());
+                    $this->getHandler()->cancel();
+                    return;
+                }
+            }
 
-        if ($player->getPosition()->equals($this->startPosition)) {
-            $player->sendTip((string) new Message("countdown-tip", ["{timer}"], [$this->timer]));
-            $this->timer--;
-        } else {
-            $player->sendMessage((string) new Message("teleportation-cancelled"));
-            $player->getEffects()->remove(VanillaEffects::BLINDNESS());
-            $this->getHandler()->cancel();
-            return;
-        }
+            if ($player->getPosition()->equals($this->startPosition)) {
+                $player->sendTip((string) new Message("countdown-tip", ["{timer}"], [$this->timer]));
+                $this->timer--;
+            } else {
+                $player->sendMessage((string) new Message("teleportation-cancelled"));
+                $player->getEffects()->remove(VanillaEffects::BLINDNESS());
+                $this->getHandler()->cancel();
+                return;
+            }
 
-        if ($this->timer === 0) {
-            $player->getEffects()->remove(VanillaEffects::BLINDNESS());
-            $player->teleport($hubPosition);
-            $player->sendMessage((string) new Message("successfully-teleported"));
-            $this->getHandler()->cancel();
-        }
+            if ($this->timer === 0) {
+                $player->getEffects()->remove(VanillaEffects::BLINDNESS());
+                $player->teleport($hubPosition);
+                $player->sendMessage((string) new Message("successfully-teleported"));
+                $this->getHandler()->cancel();
+            }
+        });
     }
 }
