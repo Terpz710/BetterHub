@@ -15,7 +15,7 @@ use pocketmine\player\Player;
 
 use pocketmine\Server;
 
-use terpz710\betterhub\{Hub, HubManager};
+use terpz710\betterhub\Hub;
 
 use terpz710\betterhub\utils\{Message, Error};
 
@@ -23,15 +23,13 @@ class TeleportationTask extends Task {
 
     private Player $player;
 
-    private HubManager $hubManager;
-
     private Position $startPosition;
 
     private int $timer;
 
     public function __construct(Player $player) {
         $this->player = $player;
-        $this->hubManager = HubManager::getInstance();
+        $this->hubManager = Hub::getInstance()->getHubManager();
         $this->startPosition = $player->getPosition();
         $this->timer = Hub::getInstance()->getConfig()->get("timer");
 
