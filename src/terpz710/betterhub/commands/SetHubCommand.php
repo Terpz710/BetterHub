@@ -18,7 +18,7 @@ use terpz710\betterhub\utils\{Message, Error, Permission};
 
 class SetHubCommand extends Command implements PluginOwned {
 
-    private $plugin;
+    private Hub $plugin;
 
     public function __construct() {
         parent::__construct(Hub::getInstance()->getConfig()->get("sethub-command-label"));
