@@ -1,21 +1,42 @@
--- Initialize the hub table
-hub.init:
-CREATE TABLE IF NOT EXISTS hub (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    x DOUBLE NOT NULL,
-    y DOUBLE NOT NULL,
-    z DOUBLE NOT NULL,
-    world VARCHAR(255) NOT NULL
-);
+-- #!mysql
 
--- Delete all hub entries
-hub.delete:
-DELETE FROM hub;
+-- #{ table
+    -- #{ hub
+        CREATE TABLE IF NOT EXISTS hub (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            x REAL NOT NULL,
+            y REAL NOT NULL,
+            z REAL NOT NULL,
+            world TEXT NOT NULL
+        );
+    -- #}
+-- #}
 
--- Insert a hub position
-hub.insert:
-INSERT INTO hub (x, y, z, world) VALUES (:x, :y, :z, :world);
+-- #{ data
+    -- #{ init
+        CREATE TABLE IF NOT EXISTS hub (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            x REAL NOT NULL,
+            y REAL NOT NULL,
+            z REAL NOT NULL,
+            world TEXT NOT NULL
+        );
+    -- #}
 
--- Select the hub position
-hub.select:
-SELECT x, y, z, world FROM hub LIMIT 1;
+    -- #{ delete
+        DELETE FROM hub;
+    -- #}
+
+    -- #{ insert
+        -- # :x float
+        -- # :y float
+        -- # :z float
+        -- # :world string
+        INSERT INTO hub (x, y, z, world)
+        VALUES (:x, :y, :z, :world);
+    -- #}
+
+    -- #{ select
+        SELECT x, y, z, world FROM hub LIMIT 1;
+    -- #}
+-- #}
