@@ -31,9 +31,13 @@ final class Hub extends PluginBase {
             new DeleteHubCommand()
         ]);
 
-        $this->manager = new HubManager();
+        $this->manager = new HubManager($this);
 
         $this->messages = new Config($this->getDataFolder() . "messages.yml");
+    }
+
+    protected function onDisable() : void{
+        $this->manager->close();
     }
 
     public static function getInstance() : self{
