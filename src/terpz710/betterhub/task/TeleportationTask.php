@@ -46,7 +46,6 @@ class TeleportationTask extends Task {
             return;
         }
 
-    // Use the asynchronous `getHub` method with a callback
         $this->hubManager->getHub(function (?Position $hubPosition) use ($player): void {
             if ($hubPosition === null) {
                 $player->sendMessage((string) new Message("hub-not-set"));
