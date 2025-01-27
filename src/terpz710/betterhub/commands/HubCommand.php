@@ -31,7 +31,7 @@ class HubCommand extends Command implements PluginOwned {
         $this->plugin = Hub::getInstance();
     }
 
-    public function execute(CommandSender $sender, string $label, array $args) : bool{
+    public function execute(CommandSender $sender, string $label, array $args) : bool {
         if (!$sender instanceof Player) {
             $sender->sendMessage(Error::TYPE_USE_COMMAND_INGAME_ONLY);
             return false;
@@ -42,13 +42,15 @@ class HubCommand extends Command implements PluginOwned {
         }
 
         $hubManager = $this->plugin->getHubManager();
-        if ($hubManager->getHub() === null) {
-            $sender->sendMessage((string) new Message("hub-not-set"));
-            return false;
-        }
 
-        $sender->sendMessage((string) new Message("preparing-to-teleport"));
-        $this->plugin->getScheduler()->scheduleRepeatingTask(new TeleportationTask($sender), 20);
+        $hubManager->getHub(function (?Position $hubPosition) use ($sender) : void{
+            if ($hubPosition === null) {
+                $sender->sendMessage((string) new Message("hub-not-set"));
+                return;
+            }
+            $sender->sendMessage((string) new Message("preparing-to-teleport"));
+            $this->plugin->getScheduler()->scheduleRepeatingTask(new TeleportationTask($sender, $hubPosition), 20);
+        });
         return true;
     }
 
