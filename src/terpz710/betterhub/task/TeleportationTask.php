@@ -15,7 +15,7 @@ use pocketmine\player\Player;
 
 use pocketmine\Server;
 
-use terpz710\betterhub\Hub;
+use terpz710\betterhub\{Hub, HubManager};
 
 use terpz710\betterhub\utils\{Message, Error};
 
