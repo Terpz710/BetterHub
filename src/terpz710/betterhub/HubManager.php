@@ -4,75 +4,74 @@ declare(strict_types=1);
 
 namespace terpz710\betterhub;
 
-use pocketmine\player\Player;
-
-use pocketmine\utils\SingletonTrait;
-
 use pocketmine\world\Position;
 
-use SQLite3;
+use poggit\libasynql\libasynql;
+use poggit\libasynql\DataConnector;
 
 final class HubManager {
-    use SingletonTrait;
 
-    private $plugin;
-    private $db;
+    private DataConnector $database;
 
-    public function __construct() {
-        $this->plugin = Hub::getInstance();
+    public function __construct(protected Hub $plugin) {
+        $this->plugin = $plugin;
 
-        $this->db = new SQLite3($this->plugin->getDataFolder() . "hub.db");
+        $this->database = libasynql::create($this->plugin, $plugin->getConfig()->get("database"), [
+            "sqlite" => "sqlite.sql",
+            "mysql" => "mysql.sql"
+        ]);
+
         $this->initializeDatabase();
     }
 
     private function initializeDatabase() : void{
-        $this->db->exec("CREATE TABLE IF NOT EXISTS hub (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            x REAL,
-            y REAL,
-            z REAL,
-            world TEXT
-        )");
+        $this->database->executeGeneric("hub.init", []);
     }
 
     public function setHub(Position $position) : void{
-        $this->db->exec("DELETE FROM hub");
-
-        $stmt = $this->db->prepare("INSERT INTO hub (x, y, z, world) VALUES (:x, :y, :z, :world)");
-        $stmt->bindValue(":x", $position->getX(), SQLITE3_FLOAT);
-        $stmt->bindValue(":y", $position->getY(), SQLITE3_FLOAT);
-        $stmt->bindValue(":z", $position->getZ(), SQLITE3_FLOAT);
-        $stmt->bindValue(":world", $position->getWorld()->getFolderName(), SQLITE3_TEXT);
-        $stmt->execute();
-        $stmt->close();
+        $this->database->executeChange("hub.delete", []);
+        $this->database->executeChange("hub.insert", [
+            "x" => $position->getX(),
+            "y" => $position->getY(),
+            "z" => $position->getZ(),
+            "world" => $position->getWorld()->getFolderName()
+        ]);
     }
 
-    public function getHub() : ?Position{
-        $result = $this->db->query("SELECT x, y, z, world FROM hub LIMIT 1");
-        $data = $result->fetchArray(SQLITE3_ASSOC);
-
-        if ($data === false) {
-            return null;
-        }
-
-        $worldManager = $this->plugin->getServer()->getWorldManager();
-        $worldName = $data["world"];
-
-        if (!$worldManager->isWorldLoaded($worldName)) {
-            if (!$worldManager->loadWorld($worldName)) {
-                return null;
+    public function getHub(callable $callback) : void{
+        $this->database->executeSelect("hub.select", [], function (array $rows) use ($callback): void {
+            if (count($rows) === 0) {
+                $callback(null);
+                return;
             }
-        }
 
-        $world = $worldManager->getWorldByName($worldName);
-        if ($world === null) {
-            return null;
-        }
+            $data = $rows[0];
+            $worldManager = Hub::getInstance()->getServer()->getWorldManager();
+            $worldName = $data["world"];
 
-        return new Position($data["x"], $data["y"], $data["z"], $world);
+            if (!$worldManager->isWorldLoaded($worldName)) {
+                if (!$worldManager->loadWorld($worldName)) {
+                    $callback(null);
+                    return;
+                }
+            }
+
+            $world = $worldManager->getWorldByName($worldName);
+            if ($world === null) {
+                $callback(null);
+                return;
+            }
+
+            $position = new Position((float)$data["x"], (float)$data["y"], (float)$data["z"], $world);
+            $callback($position);
+        });
     }
 
     public function deleteHub() : void{
-        $this->db->exec("DELETE FROM hub");
+        $this->database->executeChange("hub.delete", []);
+    }
+
+    public function close() : void{
+        $this->database->close();
     }
 }
