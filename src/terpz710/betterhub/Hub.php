@@ -25,6 +25,8 @@ final class Hub extends PluginBase {
     protected function onEnable() : void{
         $this->saveDefaultConfig();
         $this->saveResource("messages.yml");
+        $this->saveResource("sqlite.sql");
+        $this->saveResource("mysql.sql");
         $this->getServer()->getCommandMap()->registerAll("BetterHub", [
             new HubCommand(),
             new SetHubCommand(),
