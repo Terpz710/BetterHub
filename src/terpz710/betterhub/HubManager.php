@@ -24,21 +24,30 @@ final class HubManager {
     }
 
     public function setHub(Position $position) : void{
-        $this->database->executeChange("hub.delete", [], null, function (\Exception $e): void {
-            $this->plugin->getLogger()->error("Failed to delete existing hub: " . $e->getMessage());
-        });
-
-        $this->database->executeChange("hub.insert", [
+        $this->database->executeChange("hub.update", [
             "x" => $position->getX(),
             "y" => $position->getY(),
             "z" => $position->getZ(),
             "world" => $position->getWorld()->getFolderName()
         ], function (int $affectedRows): void {
             if ($affectedRows > 0) {
-                $this->plugin->getLogger()->info("Hub position set successfully.");
+                $this->plugin->getLogger()->info("Hub position updated successfully.");
+            } else {
+                $this->database->executeChange("hub.insert", [
+                    "x" => $position->getX(),
+                    "y" => $position->getY(),
+                    "z" => $position->getZ(),
+                    "world" => $position->getWorld()->getFolderName()
+                ], function (int $affectedRows): void {
+                    if ($affectedRows > 0) {
+                        $this->plugin->getLogger()->info("Hub position set successfully.");
+                    }
+                }, function (\Exception $e): void {
+                    $this->plugin->getLogger()->error("Failed to insert hub position: " . $e->getMessage());
+                });
             }
         }, function (\Exception $e): void {
-            $this->plugin->getLogger()->error("Failed to set hub position: " . $e->getMessage());
+            $this->plugin->getLogger()->error("Failed to update hub position: " . $e->getMessage());
         });
     }
 
