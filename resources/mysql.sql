@@ -13,18 +13,7 @@
     -- #}
 -- #}
 
--- #{ data
-    -- #{ init
-        CREATE TABLE IF NOT EXISTS hub (
-            id INTEGER PRIMARY KEY AUTO_INCREMENT,
-            x REAL NOT NULL,
-            y REAL NOT NULL,
-            z REAL NOT NULL,
-            world TEXT NOT NULL,
-            UNIQUE(world)
-        );
-    -- #}
-
+-- #{ hub
     -- #{ update
         -- # :x float
         -- # :y float
