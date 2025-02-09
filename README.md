@@ -5,6 +5,15 @@ This plugin also has a timer + blindness effect to make the proccess much more a
 
 Unlike other hub plugins on the market, this one allows you to set the hub anywhere rather than relying on default world spawn.
 
+# Requirement
+This plugin requires a plugin called libasynql!
+
+Make sure to drop both BetterHub and libasynql inside the 'plugins' folder!
+
+Do **NOT** open bug report indicating this issue, I will close it without giving any response. Please make sure to read plugins descriptions!
+
+[Link to the virion](https://poggit.pmmp.io/ci/poggit/libasynql/libasynql)
+
 # Features
 - SQLite and MySQL database are supported!
 - Customizable messages + commands
