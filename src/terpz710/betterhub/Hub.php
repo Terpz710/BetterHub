@@ -35,6 +35,8 @@ final class Hub extends PluginBase {
 
         $this->manager = new HubManager($this);
 
+        $this->manager->init();
+
         $this->messages = new Config($this->getDataFolder() . "messages.yml");
     }
 
