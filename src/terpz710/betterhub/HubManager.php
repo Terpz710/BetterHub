@@ -18,8 +18,8 @@ final class HubManager {
 
     public function init() : void{
         $this->database = libasynql::create($this->plugin, $this->plugin->getConfig()->get("database"), [
-            "sqlite" => "sqlite.sql",
-            "mysql" => "mysql.sql"
+            "sqlite" => "database/sqlite.sql",
+            "mysql" => "database/mysql.sql"
         ]);
         $this->database->executeGeneric("table.hub");
     }
