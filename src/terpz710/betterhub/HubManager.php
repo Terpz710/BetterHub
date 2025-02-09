@@ -21,6 +21,7 @@ final class HubManager {
             "sqlite" => "sqlite.sql",
             "mysql" => "mysql.sql"
         ]);
+        $this->database->executeGeneric("table.hub");
     }
 
     public function setHub(Position $position) : void{
