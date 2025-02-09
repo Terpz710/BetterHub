@@ -13,20 +13,14 @@ final class HubManager {
     private DataConnector $database;
 
     public function __construct(protected Hub $plugin) {
-        $this->database = libasynql::create($this->plugin, $plugin->getConfig()->get("database"), [
+        $this->plugin = $plugin;
+    }
+
+    public function init() : void{
+        $this->database = libasynql::create($this->plugin, $this->plugin->getConfig()->get("database"), [
             "sqlite" => "sqlite.sql",
             "mysql" => "mysql.sql"
         ]);
-
-        $this->initializeDatabase();
-    }
-
-    private function initializeDatabase() : void{
-        $this->database->executeGeneric("hub.init", [], function (): void {
-            $this->plugin->getLogger()->info("Hub table initialized successfully.");
-        }, function (\Exception $e): void {
-            $this->plugin->getLogger()->error("Failed to initialize hub table: " . $e->getMessage());
-        });
     }
 
     public function setHub(Position $position) : void{
