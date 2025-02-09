@@ -6,6 +6,7 @@ This plugin also has a timer + blindness effect to make the proccess much more a
 Unlike other hub plugins on the market, this one allows you to set the hub anywhere rather than relying on default world spawn.
 
 # Features
+- SQLite and MySQL database are supported!
 - Customizable messages + commands
 - Countdown timer + blindness effect
 - Instead of relying on default world spawn you may set the hub anywhere!
