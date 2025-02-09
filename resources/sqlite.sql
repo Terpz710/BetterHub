@@ -7,18 +7,14 @@
             x REAL NOT NULL,
             y REAL NOT NULL,
             z REAL NOT NULL,
-            world TEXT NOT NULL UNIQUE
+            world TEXT NOT NULL
         );
     -- #}
 -- #}
 
 -- #{ hub
-    -- #{ update
-        -- # :x float
-        -- # :y float
-        -- # :z float
-        -- # :world string
-        UPDATE hub SET x = :x, y = :y, z = :z WHERE world = :world;
+    -- #{ delete
+        DELETE FROM hub;
     -- #}
 
     -- #{ insert
@@ -27,8 +23,7 @@
         -- # :z float
         -- # :world string
         INSERT INTO hub (x, y, z, world)
-        VALUES (:x, :y, :z, :world)
-        ON CONFLICT(world) DO UPDATE SET x = excluded.x, y = excluded.y, z = excluded.z;
+        VALUES (:x, :y, :z, :world);
     -- #}
 
     -- #{ select
