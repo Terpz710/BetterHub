@@ -1,0 +1,14 @@
+{
+    "name": "terpz710/betterhub",
+    "type": "project",
+    "license": "GNU General Public License v3.0",
+    "require": {
+        "pocketmine/pocketmine-mp": "^5.0",
+        "poggit/libasynql": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BetterHub\\": "src/BetterHub"
+        }
+    }
+}
